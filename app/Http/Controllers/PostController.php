@@ -27,14 +27,31 @@ class PostController extends Controller {
 
     public function store(Request $request) {
         //validation
+        // $inputs = $request->validate([
+        //     'title' => 'required|min:8|max:255',
+        //     'post_image' => 'nullable|file',
+        //     'body' => 'required|min:60'
+        // ]);
+
         $inputs = $request->validate([
-            'title' => 'required|min:8|max:255',
+            'title' => 'required',
             'post_image' => 'nullable|file',
-            'body' => 'required|min:60'
+            'body' => 'required'
         ]);
 
         if ($request->post_image) {
             $inputs['post_image'] = $request->post_image->store('images');
         }
+
+        Auth()->user()->posts()->create($inputs);
+
+        return back();
+    }
+
+    public function list() {
+
+        $posts = Post::all();
+
+        return view('admin.posts.index', compact('posts'));
     }
 }

@@ -7,6 +7,7 @@
       <div class="bg-white py-2 collapse-inner rounded">
         <h6 class="collapse-header">Posts</h6>
         <a class="collapse-item" href="{{ route('post.create') }}">Create Post</a>
+        <a class="collapse-item" href="{{ route('post.list') }}">View All Post</a>
         {{-- <a class="collapse-item" href="cards.html">Cards</a> --}}
       </div>
     </div>
