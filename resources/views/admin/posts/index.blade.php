@@ -1,7 +1,15 @@
 <x-admin-master>
     @section('content')
         <h1>All Post</h1>
-
+  @if(session('delete'))
+    <div class="alert alert-danger">{{ session('delete') }}</div>
+  @elseif(session('create'))
+    <div class="alert alert-success">{{ session('create') }}</div>
+  @elseif(session('update_success'))
+    <div class="alert alert-success">{{ session('update_success') }}</div>
+  @elseif(session('update_fail'))
+    <div class="alert alert-danger">{{ session('update_fail') }}</div>
+  @endif
         <div class="card shadow mb-4">
             <div class="card-header py-3">
               <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
@@ -16,7 +24,8 @@
                       <th>Title</th>
                       <th>Image</th>
                       <th>Created At</th>
-                      <th>Updated</th>
+                      <th>Updated At</th>
+                      <th>Delete</th>
                     </tr>
                   </thead>
                   <tfoot>
@@ -26,7 +35,8 @@
                         <th>Title</th>
                         <th>Image</th>
                         <th>Created At</th>
-                        <th>Updated</th>
+                        <th>Updated At</th>
+                        <th>Delete</th>
                     </tr>
                   </tfoot>
                   <tbody>
@@ -34,10 +44,21 @@
                     <tr>
                         <td>{{ $post->id }}</td>
                         <td>{{ $post->user->name }}</td>
-                        <td>{{ $post->title }}</td>
-                        <td><img src="{{ $post->post_image }}" height="40px"></td>
+                        <td><a href="{{ route('post.edit', $post->id) }}">{{ $post->title }}</a></td>
+                        <td><img src="{{ asset($post->post_image) }}" height="40px"></td>
                         <td>{{ $post->created_at->diffForHumans() }}</td>
                         <td>{{ $post->updated_at->diffForHumans()  }}</td>
+                        <td>
+                          @can('view', $post)
+
+                          <form action="{{ route('post.destroy', $post->id) }}" method="post">
+                            @csrf
+                            @method('DELETE')
+                            <button class="btn btn-danger"><i class="fas fa-times"></i></button>
+                          </form>
+                          
+                          @endcan
+                        </td>
                       </tr>    
                     @endforeach
                     
@@ -45,7 +66,8 @@
                 </table>
               </div>
             </div>
-          </div>
+        </div>
+          {{ $posts->links() }}
     @endsection
 
     @section('scripts')
@@ -54,6 +76,6 @@
   <script src="{{ asset('vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
 
   <!-- Page level custom scripts -->
-  <script src="{{ asset('js/datatables-script.js') }}"></script>
+  {{-- <script src="{{ asset('js/datatables-script.js') }}"></script> --}}
     @endsection
 </x-admin-master>
