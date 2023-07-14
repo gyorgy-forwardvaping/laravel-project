@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Post;
+use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -18,7 +19,9 @@ class User extends Authenticatable {
      * @var array<int, string>
      */
     protected $fillable = [
+        'username',
         'name',
+        'avatar',
         'email',
         'password',
     ];
@@ -44,5 +47,33 @@ class User extends Authenticatable {
 
     public function posts() {
         return $this->hasMany(Post::class);
+    }
+
+    public function permissions() {
+        return $this->belongsToMany(Permission::class);
+    }
+
+    public function roles() {
+        return $this->belongsToMany(Role::class);
+    }
+
+    public function userHasRole($role_name) {
+        foreach ($this->roles as $role) {
+            if (Str::lower($role_name) == Str::lower($role->name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function setPasswordAttribute($value) {
+        $this->attributes['password'] = bcrypt($value);
+    }
+
+    public function getAvatarAttribute($value) {
+        if (strpos($value, 'https://') !== FALSE || strpos($value, 'http://') !== FALSE) {
+            return $value;
+        }
+        return asset('storage/' . $value);
     }
 }
