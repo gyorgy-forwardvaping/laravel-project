@@ -1,5 +1,6 @@
 <?php
 
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -37,12 +38,27 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/posts/{post}/edit', [App\Http\Controllers\PostController::class, 'edit'])->name('post.edit');
     Route::delete('/admin/posts/{post}/delete', [App\Http\Controllers\PostController::class, 'destroy'])->name('post.destroy');
     Route::patch('/admin/posts/{post}/edit', [App\Http\Controllers\PostController::class, 'update'])->name('post.update');
-
     Route::delete('admin/users/{user}/destroy', [App\Http\Controllers\UserController::class, 'destroy'])->name('admin.users.destroy');
 });
 
 Route::middleware(['role:admin', 'auth'])->group(function () {
     Route::get('admin/users', [App\Http\Controllers\UserController::class, 'index'])->name('admin.users.index');
+    Route::put('admin/users/{user}/attach', [App\Http\Controllers\UserController::class, 'attachRole'])->name('user.role.attach');
+    Route::put('admin/users/{user}/detach', [App\Http\Controllers\UserController::class, 'detachRole'])->name('user.role.detach');
+
+    Route::get('/roles', [App\Http\Controllers\RoleController::class, 'index'])->name('roles.index');
+    Route::post('/roles', [App\Http\Controllers\RoleController::class, 'store'])->name('roles.store');
+    Route::delete('/roles/{role}/destroy', [App\Http\Controllers\RoleController::class, 'destroy'])->name('roles.destroy');
+    Route::get('/roles/{role}/show', [App\Http\Controllers\RoleController::class, 'show'])->name('roles.show');
+    Route::put('/roles/{role}/update', [App\Http\Controllers\RoleController::class, 'update'])->name('roles.update');
+    Route::put('/roles/{role}/attach', [App\Http\Controllers\RoleController::class, 'attach'])->name('roles.permission.attach');
+    Route::put('/roles/{role}/detach', [App\Http\Controllers\RoleController::class, 'detach'])->name('roles.permission.detach');
+
+    Route::get('/permissions', [App\Http\Controllers\PermissionController::class, 'index'])->name('permissions.index');
+    Route::post('/permissions', [App\Http\Controllers\PermissionController::class, 'store'])->name('permissions.store');
+    Route::delete('/permissions/{permission}/destroy', [App\Http\Controllers\PermissionController::class, 'destroy'])->name('permissions.destroy');
+    Route::get('/permissions/{permission}/show', [App\Http\Controllers\PermissionController::class, 'show'])->name('permissions.show');
+    Route::put('/permissions/{permission}/show', [App\Http\Controllers\PermissionController::class, 'update'])->name('permissions.update');
 });
 
 Route::middleware(['auth', 'can:view,user'])->group(function () {

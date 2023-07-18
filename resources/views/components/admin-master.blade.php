@@ -31,10 +31,10 @@
 
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('home') }}">
-        <div class="sidebar-brand-icon rotate-n-15">
-          <i class="fas fa-laugh-wink"></i>
+        <div class="sidebar-brand-icon">
+          <i class="fas fa-home"></i>
         </div>
-        <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+        <div class="sidebar-brand-text mx-3">Main page</div>
       </a>
 
       <!-- Divider -->
@@ -56,14 +56,17 @@
       </div>
 
       <!-- Nav Item - Pages Collapse Menu -->
+
+      <x-admin.sidebar.posts></x-posts>
       @if(auth()->user()->userHasRole('Admin'))
-        <x-admin-sidebar-users></x-admin-sidebar-users>
+        <x-admin.sidebar.users></x-users>
+        <x-admin.sidebar.authorisation-links></x-authorisation-links>
       @endif
-      <x-admin-sidebar></x-admin-sidebar>
+      
       
 
       <!-- Nav Item - Utilities Collapse Menu -->
-      <li class="nav-item">
+      {{-- <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
           <i class="fas fa-fw fa-wrench"></i>
           <span>Utilities</span>
@@ -77,13 +80,13 @@
             <a class="collapse-item" href="utilities-other.html">Other</a>
           </div>
         </div>
-      </li>
+      </li> --}}
 
       <!-- Divider -->
       <hr class="sidebar-divider">
 
       <!-- Heading -->
-      <div class="sidebar-heading">
+      {{-- <div class="sidebar-heading">
         Addons
       </div>
 
@@ -122,7 +125,7 @@
       </li>
 
       <!-- Divider -->
-      <hr class="sidebar-divider d-none d-md-block">
+      <hr class="sidebar-divider d-none d-md-block"> --}}
 
       <!-- Sidebar Toggler (Sidebar) -->
       <div class="text-center d-none d-md-inline">
@@ -289,9 +292,9 @@
             <div class="topbar-divider d-none d-sm-block"></div>
 
             <!-- Nav Item - User Information -->
-            <x-admin-top-navbar-user-information>
+            <x-admin.nav-top.admin-top-navbar-user-information>
               
-            </x-admin-top-navbar-user-information>
+            </x-admin.nav-top.admin-top-navbar-user-information>
             
 
           </ul>

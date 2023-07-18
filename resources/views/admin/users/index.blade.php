@@ -46,7 +46,7 @@
                     <tr>
                         <td>{{ $user->id }}</td>
                         <td>@if($user->avatar) <img width="60px" height="60px" class="img-profile rounded-circle" src="{{ asset($user->avatar) }}"> @else -@endif</td>
-                        <td>{{ $user->username }}</td>
+                        <td><a href="{{ route('user.profile.show', $user->id) }}">{{ $user->username }}</a></td>
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
                         <td>{{ $user->created_at->diffForHumans() }}</td>
