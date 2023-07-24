@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\User;
+use App\Models\Comment;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -34,5 +35,21 @@ class Post extends Model {
             return $value;
         }
         return asset('storage/' . $value);
+    }
+
+    public function getIdAttribute($value) {
+        return $value;
+    }
+
+    // public function setIdAttribute($value) {
+    //     return Crypt::decrypt($value);
+    // }
+
+    public function comments() {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function activeComments() {
+        return $this->hasMany(Comment::class)->where('status', 2);
     }
 }

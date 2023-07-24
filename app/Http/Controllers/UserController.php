@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller {
 
@@ -26,6 +27,10 @@ class UserController extends Controller {
         ]);
 
         if ($request['avatar']) {
+            if (strpos($user->getRawOriginal('avatar'), 'https://') === FALSE && strpos($user->getRawOriginal('avatar'), 'http://') === FALSE) {
+                Storage::delete(public_path('storage/' . $user->getRawOriginal('avatar')));
+            }
+
             $inputs['avatar'] = $request['avatar']->store('images');
         }
 

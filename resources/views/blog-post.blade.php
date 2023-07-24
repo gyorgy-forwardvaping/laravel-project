@@ -1,5 +1,8 @@
 <x-home-master>
     @section('content')
+    @if(session('comment-add'))
+    <div class="alert alert-success">{{ session('comment-add') }}</div>
+  @endif
     
     <h1 class="my-4">Page Heading
         <small>Secondary Text</small>
@@ -29,32 +32,19 @@
 
         <!-- Post Content -->
         {{ $post->body }}
-        {{-- <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus, vero, obcaecati, aut, error quam sapiente nemo saepe quibusdam sit excepturi nam quia corporis eligendi eos magni recusandae laborum minus inventore?</p>
-
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut, tenetur natus doloremque laborum quos iste ipsum rerum obcaecati impedit odit illo dolorum ab tempora nihil dicta earum fugiat. Temporibus, voluptatibus.</p>
-
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos, doloribus, dolorem iusto blanditiis unde eius illum consequuntur neque dicta incidunt ullam ea hic porro optio ratione repellat perspiciatis. Enim, iure!</p>
-
-        <blockquote class="blockquote">
-          <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-          <footer class="blockquote-footer">Someone famous in
-            <cite title="Source Title">Source Title</cite>
-          </footer>
-        </blockquote>
-
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error, nostrum, aliquid, animi, ut quas placeat totam sunt tempora commodi nihil ullam alias modi dicta saepe minima ab quo voluptatem obcaecati?</p>
-
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Harum, dolor quis. Sunt, ut, explicabo, aliquam tenetur ratione tempore quidem voluptates cupiditate voluptas illo saepe quaerat numquam recusandae? Qui, necessitatibus, est!</p> --}}
-
+        
         <hr>
 
         <!-- Comments Form -->
         <div class="card my-4">
           <h5 class="card-header">Leave a Comment:</h5>
           <div class="card-body">
-            <form>
+            <form method="post" action="{{ route('post.comment', $post->id) }}">
+              @csrf
+              @method('POST')
               <div class="form-group">
-                <textarea class="form-control" rows="3"></textarea>
+                <label for="comment">Comment:</label>
+                <textarea class="form-control" name="comment" id="comment" rows="3"></textarea>
               </div>
               <button type="submit" class="btn btn-primary">Submit</button>
             </form>
@@ -62,7 +52,22 @@
         </div>
 
         <!-- Single Comment -->
+        @if (count($post->activeComments))
+        @foreach ($post->activeComments as $comment)
         <div class="media mb-4">
+          <img class="d-flex mr-3 rounded-circle" width="50px" height="50px" src="{{ $comment->user->avatar }}" alt="">
+          <div class="media-body">
+            <h5 class="mt-0">{{ $comment->user->name }}</h5>
+            {{ $comment->comment }}
+          </div>
+        </div>
+        @endforeach
+        @else
+          <div class="alert alert-light" role="alert">
+            No comments to show at the moment.
+          </div>
+        @endif
+        {{-- <div class="media mb-4">
           <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
           <div class="media-body">
             <h5 class="mt-0">Commenter Name</h5>
@@ -94,7 +99,7 @@
             </div>
 
           </div>
-        </div>
+        </div> --}}
     @endsection
     
 </x-home-master>

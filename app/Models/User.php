@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use App\Models\Post;
+use App\Models\Comment;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -70,10 +72,22 @@ class User extends Authenticatable {
         $this->attributes['password'] = bcrypt($value);
     }
 
+    // public function getIdAttribute($value) {
+    //     return Crypt::encrypt($value);
+    // }
+
+    // public function setIdAttribute($value) {
+    //     return Crypt::decrypt($value);
+    // }
+
     public function getAvatarAttribute($value) {
         if (strpos($value, 'https://') !== FALSE || strpos($value, 'http://') !== FALSE) {
             return $value;
         }
         return asset('storage/' . $value);
+    }
+
+    public function comments() {
+        return $this->hasMany(Comment::class);
     }
 }

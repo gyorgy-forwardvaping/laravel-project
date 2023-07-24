@@ -27,9 +27,16 @@ Route::get('/posts', [App\Http\Controllers\PostController::class, 'index'])->nam
 //model binding. insted of the variable the model passed over
 Route::get('/post/{post}', [App\Http\Controllers\PostController::class, 'show'])->name('post');
 
+//comments and replies
+
+
+
+
 //auth route
 
 Route::middleware('auth')->group(function () {
+    Route::post('/post/{post}', [App\Http\Controllers\CommentController::class, 'create'])->name('post.comment');
+
     Route::get('/admin', [App\Http\Controllers\AdminController::class, 'index'])->name('admin');
     Route::get('/admin/posts', [App\Http\Controllers\PostController::class, 'list'])->name('post.list');
     Route::post('/admin/posts', [App\Http\Controllers\PostController::class, 'store'])->name('post.store');
@@ -59,6 +66,10 @@ Route::middleware(['role:admin', 'auth'])->group(function () {
     Route::delete('/permissions/{permission}/destroy', [App\Http\Controllers\PermissionController::class, 'destroy'])->name('permissions.destroy');
     Route::get('/permissions/{permission}/show', [App\Http\Controllers\PermissionController::class, 'show'])->name('permissions.show');
     Route::put('/permissions/{permission}/show', [App\Http\Controllers\PermissionController::class, 'update'])->name('permissions.update');
+
+    Route::get('admin/comments', [App\Http\Controllers\CommentController::class, 'list'])->name('admin.comments.index');
+    Route::put('admin/comments/{comment}/approve', [App\Http\Controllers\CommentController::class, 'approve'])->name('admin.comments.approve');
+    Route::put('admin/comments/{comment}/disapprove', [App\Http\Controllers\CommentController::class, 'disapprove'])->name('admin.comments.disapprove');
 });
 
 Route::middleware(['auth', 'can:view,user'])->group(function () {
