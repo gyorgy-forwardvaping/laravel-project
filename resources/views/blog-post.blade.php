@@ -2,6 +2,8 @@
     @section('content')
     @if(session('comment-add'))
     <div class="alert alert-success">{{ session('comment-add') }}</div>
+    @elseif(session('reply-add'))
+    <div class="alert alert-success">{{ session('reply-add') }}</div>
   @endif
     
     <h1 class="my-4">Page Heading
@@ -59,7 +61,33 @@
           <div class="media-body">
             <h5 class="mt-0">{{ $comment->user->name }}</h5>
             {{ $comment->comment }}
+            <div class="card my-4">
+              
+              <div class="card-body">
+                <form method="post" action="{{ route('post.comment.store.reply', $comment->id) }}">
+                  @csrf
+                  @method('POST')
+                  <div class="form-group">
+                    <label for="comment">Reply:</label>
+                    <textarea class="form-control" name="comment" id="comment" rows="3"></textarea>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+              </div>
+            </div>
+            @if ($comment->activeReplies)
+              @foreach ($comment->activeReplies as $replies)
+              <div class="media mt-4">
+                <img class="d-flex mr-3 rounded-circle" width="50px" height="50px" src="{{ $replies->user->avatar }}" alt="">
+                <div class="media-body">
+                  <h5 class="mt-0">{{ $replies->user->name }}</h5>
+                  {{ $replies->comment }}
+                </div>
+              </div>      
+              @endforeach
+            @endif
           </div>
+          
         </div>
         @endforeach
         @else

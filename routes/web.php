@@ -36,6 +36,7 @@ Route::get('/post/{post}', [App\Http\Controllers\PostController::class, 'show'])
 
 Route::middleware('auth')->group(function () {
     Route::post('/post/{post}', [App\Http\Controllers\CommentController::class, 'create'])->name('post.comment');
+    Route::post('/post/reply/{comment}', [App\Http\Controllers\CommentReplyController::class, 'store'])->name('post.comment.store.reply');
 
     Route::get('/admin', [App\Http\Controllers\AdminController::class, 'index'])->name('admin');
     Route::get('/admin/posts', [App\Http\Controllers\PostController::class, 'list'])->name('post.list');

@@ -14,4 +14,8 @@ class CommentReply extends Model {
         'comment',
         'comment_id'
     ];
+
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
 }

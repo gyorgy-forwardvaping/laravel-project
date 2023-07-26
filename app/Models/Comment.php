@@ -19,6 +19,10 @@ class Comment extends Model {
         return $this->hasMany(CommentReply::class);
     }
 
+    public function activeReplies() {
+        return $this->hasMany(CommentReply::class)->where('status', 2);
+    }
+
     public function post() {
         return $this->belongsTo(Post::class);
     }
